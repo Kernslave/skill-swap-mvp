@@ -6,48 +6,47 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
-<body>
-    <div class="auth-container">
-        <h2>Welcome to Skill Swap</h2>
-        <input type="email" id="email" placeholder="University Email">
-        <input type="password" id="password" placeholder="Password">
-        <br>
-        <button onclick="signUp()">Register</button>
-        <button onclick="signIn()">Login</button>
-    </div>
+<body style="text-align: center; padding-top: 50px;">
+    <h2>Login to Campus Skill-Swap</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password"><br><br>
+    <button onclick="register()">Register</button>
+    <button onclick="login()">Login</button>
 
     <script>
-        // PASTE YOUR CONFIG HERE
-        const firebaseConfig = {
-            apiKey: "AIzaSyD1YlQ3K09ZcC575IJh7Gbw5FX0qGjBtzs",
-            authDomain: "skill-swap-mvp-a5216.firebaseapp.com",
-            databaseURL: "https://skill-swap-mvp-a5216-default-rtdb.firebaseio.com",
-            projectId: "skill-swap-mvp-a5216",
-            storageBucket: "skill-swap-mvp-a5216.firebasestorage.app",
-            messagingSenderId: "29089638965",
-            appId: "1:29089638965:web:c7967e6e063995fce9df7c"
-        };
+
+        // Add this to the TOP of your <script> in index.html
+firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+        // If not logged in, kick them back to login page
+        window.location.href = "login.html";
+    } else {
+        console.log("Welcome:", user.email);
+        loadSkills(); // Call your function to show the skills
+    }
+});
+
+function logout() {
+    firebase.auth().signOut();
+}
+        const firebaseConfig = { /* PASTE YOUR REAL CONFIG HERE */ };
         firebase.initializeApp(firebaseConfig);
 
-        // This is why "nothing happened" before: we need to redirect!
+        // REDIRECT LOGIC: If login works, go to index.html
         firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                window.location.href = "index.html"; // Send to main page if logged in
-            }
+            if (user) window.location.href = "index.html";
         });
 
-        function signUp() {
+        function register() {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            firebase.auth().createUserWithEmailAndPassword(e, p)
-                .catch(err => alert(err.message));
+            firebase.auth().createUserWithEmailAndPassword(e, p).catch(err => alert(err.message));
         }
 
-        function signIn() {
+        function login() {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            firebase.auth().signInWithEmailAndPassword(e, p)
-                .catch(err => alert(err.message));
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
         }
     </script>
 </body>
