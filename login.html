@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Skill Swap</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Welcome to Skill Swap</h2>
+        <input type="email" id="email" placeholder="University Email">
+        <input type="password" id="password" placeholder="Password">
+        <br>
+        <button onclick="signUp()">Register</button>
+        <button onclick="signIn()">Login</button>
+    </div>
+
+    <script>
+        // PASTE YOUR CONFIG HERE
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1YlQ3K09ZcC575IJh7Gbw5FX0qGjBtzs",
+            authDomain: "skill-swap-mvp-a5216.firebaseapp.com",
+            databaseURL: "https://skill-swap-mvp-a5216-default-rtdb.firebaseio.com",
+            projectId: "skill-swap-mvp-a5216",
+            storageBucket: "skill-swap-mvp-a5216.firebasestorage.app",
+            messagingSenderId: "29089638965",
+            appId: "1:29089638965:web:c7967e6e063995fce9df7c"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // This is why "nothing happened" before: we need to redirect!
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = "index.html"; // Send to main page if logged in
+            }
+        });
+
+        function signUp() {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            firebase.auth().createUserWithEmailAndPassword(e, p)
+                .catch(err => alert(err.message));
+        }
+
+        function signIn() {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            firebase.auth().signInWithEmailAndPassword(e, p)
+                .catch(err => alert(err.message));
+        }
+    </script>
+</body>
+</html>
